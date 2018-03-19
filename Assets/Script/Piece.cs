@@ -33,16 +33,35 @@ public abstract class Piece  {
 		} else {
 			pieceName += "_White";
 		}
-		CalculateLegalMoves ();
 		this.col = 'A';
 		this.col += (char)col;
 		this.row = '1';
 		this.row += (char)row;
 		this.color = color;
+		CalculateLegalMoves ();
+	}
+
+	public Piece(char col, char row, bool color){
+		pieceName = this.GetType ().Name;
+		if (color) {
+			pieceName += "_Black";
+		} else {
+			pieceName += "_White";
+		}
+		this.col = col;
+		this.row = row;
+		this.color = color;
+		CalculateLegalMoves ();
 	}
 
 	// Methods
 
+	public void SetPosition(Square pos){
+		this.position = pos;
+		this.col = pos.col;
+		this.row = pos.row;
+		CalculateLegalMoves ();
+	}
 
 	public override string ToString (){
 		return pieceName;

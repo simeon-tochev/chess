@@ -20,7 +20,7 @@ public class Board {
 
 	public Square[,] squares = new Square[8,8];
 
-	public List<Piece> pieces = new ArrayList();
+	public List<Piece> pieces = new List<Piece>();
 
 	private Player whitePlayer;
 	private Player blackPlayer;
@@ -36,7 +36,7 @@ public class Board {
 
 	public Board (Board b, Move m) {
 		InitializeSquares ();
-		b.pieces.Find(m.pieceToMove).col = m.movePoisition  <---
+	//	b.pieces. .SetPosition (m.movePoisition);
 	}
 
 	public Board (string[] b) {

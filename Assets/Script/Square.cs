@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Square  {
 
+	public char 	col;
+	public char		row;
+
 	public string 	abbreviation;
 
 	public bool 	isBlack;
@@ -23,14 +26,18 @@ public class Square  {
 	public Square(int col, int row){
 		char c = (char)col;
 		c += 'A';
+		this.col = c;
 		char r = (char)row;
 		r += '1';
+		this.row = r;
 		string s = c.ToString() + r.ToString();
 		isBlack = ((row + col) % 2 == 0); 
 		abbreviation = s;
 	}
 
 	public Square(char col, char row){
+		this.col = col;
+		this.row = row;
 		string s = col.ToString() + row.ToString();
 		abbreviation = s;
 		isBlack = ((int)row + (int)col) % 2 == 0;
