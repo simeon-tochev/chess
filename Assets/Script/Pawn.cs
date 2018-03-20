@@ -8,53 +8,58 @@ public class Pawn : Piece {
 
 	// Constructors
 
-	public Pawn(int col, int row, bool color) : base(col, row, color) { base.value = value; }
+	public Pawn(int col, int row, bool color, Board b) : base(col, row, color, b) { base.value = value; }
 
 	// Methods
 
 	public override void CalculateLegalMoves(){
-		/*
+		
 		legalMoves.Clear ();
 		if (!color) {
 			if (row == 1  && !color) {
 				if (!position.GetUpper().GetUpper().isOccupied()) {
-					legalMoves.Add (position.GetUpper().GetUpper());
+					legalMoves.Add (GenerateMove(position.GetUpper().GetUpper(), false));
 				}
 			}
 			if (!position.GetUpper().isOccupied()) {
-				legalMoves.Add (position.GetUpper());
+				legalMoves.Add (GenerateMove(position.GetUpper(), false));
 			}
 			if (col < 7 && position.GetUpperRight ().isOccupied()) {
 				if (position.GetUpperRight ().GetOccupant ().GetColor () != color) {
-					legalMoves.Add (position.GetUpperRight ());
+					legalMoves.Add (GenerateMove(position.GetUpperRight ()));
 				}
 			}
 			if (col > 0 && position.GetUpperLeft ().isOccupied()) {
 				if (position.GetUpperLeft ().GetOccupant ().GetColor () != color) {
-					legalMoves.Add (position.GetUpperLeft ());
+					legalMoves.Add (GenerateMove(position.GetUpperLeft ()));
 				}
 			}
 		} else {
 			if (row == 6 && color) {
 				if (!position.GetLower().GetLower().isOccupied ()) {
-					legalMoves.Add (position.GetLower().GetLower());
+					legalMoves.Add (GenerateMove(position.GetLower().GetLower(), false));
 				}
 			}
 			if (!position.GetLower().isOccupied()) {
-				legalMoves.Add (position.GetLower());
+				legalMoves.Add (GenerateMove(position.GetLower (), false));
 			}
 			if (col < 7 && position.GetLowerRight ().isOccupied()) {
 				if (position.GetLowerRight ().GetOccupant ().GetColor () != color) {
-					legalMoves.Add (position.GetLowerRight ());
+					legalMoves.Add (GenerateMove(position.GetLowerRight ()));
 				}
 			}
 			if (col > 0 && position.GetLowerLeft ().isOccupied()) {
 				if (position.GetLowerLeft ().GetOccupant ().GetColor () != color) {
-					legalMoves.Add (position.GetLowerLeft ());
+					legalMoves.Add (GenerateMove(position.GetLowerLeft ()));
 				}
 			}
 		}
-		*/
+
+		foreach (Move m in legalMoves) {
+			if (new Board (board, m).Checked (color)) {
+				legalMoves.Remove (m);
+			}
+		}
 	}
 
 }

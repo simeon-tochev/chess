@@ -6,4 +6,10 @@ public class PieceMono : MonoBehaviour {
 
 	public Piece piece;
 
+	public MoveManager moveManager;
+
+	void OnMouseDown(){
+		moveManager.SelectPiece (piece);
+	}
+
 }

@@ -17,6 +17,8 @@ public class Square  {
 
 	public Piece 	occupant;
 
+	public SquareMono squareMono;
+
 	// Constructors
 
 	public Square(string abv){
@@ -59,43 +61,43 @@ public class Square  {
 //		moveManager = GameObject.Find ("MoveManager").GetComponent<MoveManager> ();
 //	}
 
-//	public bool isOccupied(){
-//	//	if (!occupant.Equals(null)) {
-//	//		return true;
-//	//	} else {
-//	//		return false;
-//	//	}
-//	}
-//
-//	public Square GetUpper(){
-//		return currentBoard.GetUpper(this);
-//	}
-//
-//	public Square GetLower(){
-//		return currentBoard.GetLower(this);
-//	}
-//
-//	public Square GetRight(){
-//		return currentBoard.GetRight(this);
-//	}
-//
-//	public Square GetLeft(){
-//		return currentBoard.GetLeft(this);
-//	}
-//
-//	public Square GetUpperLeft(){
-//		return currentBoard.GetUpperLeft(this);
-//	}
-//
-//	public Square GetLowerLeft(){
-//		return currentBoard.GetLowerLeft(this);
-//	}
-//
-//	public Square GetUpperRight(){
-//		return currentBoard.GetUpperRight(this);
-//	}
-//
-//	public Square GetLowerRight(){
-//		return currentBoard.GetLowerRight(this);
-//	}
+	public bool isOccupied(){
+		if (occupant != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public Square GetUpper(){
+		return currentBoard.GetUpper(this);
+	}
+
+	public Square GetLower(){
+		return currentBoard.GetLower(this);
+	}
+
+	public Square GetRight(){
+		return currentBoard.GetRight(this);
+	}
+
+	public Square GetLeft(){
+		return currentBoard.GetLeft(this);
+	}
+
+	public Square GetUpperLeft(){
+		return currentBoard.GetUpperLeft(this);
+	}
+
+	public Square GetLowerLeft(){
+		return currentBoard.GetLowerLeft(this);
+	}
+
+	public Square GetUpperRight(){
+		return currentBoard.GetUpperRight(this);
+	}
+
+	public Square GetLowerRight(){
+		return currentBoard.GetLowerRight(this);
+	}
 }

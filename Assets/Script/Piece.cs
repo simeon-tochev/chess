@@ -15,9 +15,11 @@ public abstract class Piece  {
 
 	public Square 		position;
 
-	public ArrayList 	legalMoves = new ArrayList();
+	public List<Move>	legalMoves = new List<Move> ();
 
 	public MoveManager 	moveManager;
+
+	public Board 		board;
 
 
 	// Abstract Methods and Properties
@@ -26,7 +28,7 @@ public abstract class Piece  {
 
 	// Constructors
 
-	public Piece(int col, int row, bool color){
+	public Piece(int col, int row, bool color, Board board){
 		pieceName = this.GetType ().Name;
 		if (color) {
 			pieceName += "_Black";
@@ -38,10 +40,11 @@ public abstract class Piece  {
 		this.row = '1';
 		this.row += (char)row;
 		this.color = color;
-		CalculateLegalMoves ();
+		this.board = board;
+	//	CalculateLegalMoves ();
 	}
 
-	public Piece(char col, char row, bool color){
+	public Piece(char col, char row, bool color, Board board){
 		pieceName = this.GetType ().Name;
 		if (color) {
 			pieceName += "_Black";
@@ -51,10 +54,19 @@ public abstract class Piece  {
 		this.col = col;
 		this.row = row;
 		this.color = color;
-		CalculateLegalMoves ();
+		this.board = board;
+	//	CalculateLegalMoves ();
 	}
 
 	// Methods
+
+	protected Move GenerateMove(Square movePosition){
+		return new Move (color, this, position, movePosition);
+	}
+
+	protected Move GenerateMove(Square movePosition, bool takeMove){
+		return new Move (color, this, position, movePosition, takeMove);
+	}
 
 	public void SetPosition(Square pos){
 		this.position = pos;
@@ -93,12 +105,6 @@ public abstract class Piece  {
 	}
 	*/
 
-	void OnMouseDown(){
-		if (moveManager.GetTurn () == color) {
-			moveManager.SelectPiece (this);
-		} else {
-		//	moveManager.SelectSquare (position);
-		}
-	}
+
 		
 }

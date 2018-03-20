@@ -8,7 +8,7 @@ public class Queen : Piece {
 
 	// Constructors
 
-	public Queen (int col, int row, bool color) : base(col, row, color) { base.value = value; }
+	public Queen (int col, int row, bool color, Board b) : base(col, row, color, b) { base.value = value; }
 
 	// Methods
 

@@ -6,8 +6,12 @@ public class SquareMono : MonoBehaviour {
 
 	public Square square;
 
+	public void SetSquareMono(){
+		square.squareMono = this;
+	}
+
 	void OnMouseDown(){
-	//	moveManager.SelectSquare (this);
+	//	moveManager.SelectSquare (square);
 	}
 
 }

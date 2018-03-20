@@ -7,8 +7,15 @@ public class Player : MonoBehaviour {
 	[SerializeField]
 	private bool color;
 
-	private ArrayList pieces = new ArrayList();
-	private ArrayList legalMoves = new ArrayList();
+	public ArrayList pieces = new ArrayList();
+	public List<Move> legalMoves = new List<Move> ();
+
+	// Constructors
+
+	public Player(){
+	}
+
+	// Methods
 
 	public void AddPiece(Piece p){
 		pieces.Add (p);
@@ -18,7 +25,7 @@ public class Player : MonoBehaviour {
 		pieces.Remove (p);
 	}
 
-	public ArrayList GetLegalMoves(){
+	public List<Move> GetLegalMoves(){
 		return legalMoves;
 	}
 
@@ -28,8 +35,8 @@ public class Player : MonoBehaviour {
 
 	public void AddLegalMoves(){
 		foreach (Piece p in pieces) {
-			foreach (Square s in p.legalMoves) {
-				legalMoves.Add (s);
+			foreach (Move m in p.legalMoves) {
+				legalMoves.Add (m);
 			}
 		}
 	}

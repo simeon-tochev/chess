@@ -5,6 +5,7 @@ using UnityEngine;
 public class Move : MonoBehaviour {
 
 	public bool blackTurn;
+	public bool takeMove;
 	 
 	public Piece pieceToMove; 
 	public Square piecePosition;
@@ -21,5 +22,14 @@ public class Move : MonoBehaviour {
 		pieceToMove = piece;
 		piecePosition = current;
 		movePoisition = moved;
+		takeMove = true;
+	}
+
+	public Move(bool turn, Piece piece, Square current, Square moved, bool takeMove){
+		blackTurn = turn;
+		pieceToMove = piece;
+		piecePosition = current;
+		movePoisition = moved;
+		this.takeMove = takeMove;
 	}
 }

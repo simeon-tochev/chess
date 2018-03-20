@@ -8,7 +8,7 @@ public class Rook : Piece {
 
 	// Constructors
 
-	public Rook (int col, int row, bool color) : base(col, row, color) { base.value = value; }
+	public Rook (int col, int row, bool color, Board b) : base(col, row, color, b) { base.value = value; }
 
 	// Methods
 

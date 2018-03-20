@@ -10,7 +10,10 @@ public class MoveManager : MonoBehaviour {
 	[SerializeField]
 	Square selectedSquare;
 
-	ArrayList selectedPieceLegalMoves;
+	public Board board;
+	public BoardGenerator boardG;
+
+	List<Move> selectedPieceLegalMoves;
 	ArrayList placedSquares = new ArrayList();
 
 	[SerializeField]
@@ -19,17 +22,17 @@ public class MoveManager : MonoBehaviour {
 	bool blackTurn = false;
 
 	public void SelectPiece(Piece p){
-	/*
+		print ("Succesfully selected " + p.pieceName);
 		DeleteSquares ();
 		selectedPiece = p;
-		selectedPieceLegalMoves = p.GetLegalMoves ();
-		foreach (Square sq in selectedPieceLegalMoves) {
-			GameObject pieceGO = sq.gameObject;
+		selectedPieceLegalMoves = p.legalMoves;
+		foreach (Move sq in selectedPieceLegalMoves) {
+			GameObject pieceGO = sq.movePoisition.squareMono.gameObject;
 			GameObject greenSquare = GameObject.Instantiate (squarePrefab, pieceGO.transform.position + new Vector3(0f,0f,1f), pieceGO.transform.rotation) as GameObject;
 			greenSquare.GetComponent<SpriteRenderer> ().color = Color.green;
 			placedSquares.Add (greenSquare);
 		}
-	*/
+	
 	}
 
 	public void DeselectPiece(){
@@ -42,19 +45,27 @@ public class MoveManager : MonoBehaviour {
 		print ("Selected Square");
 		if (!selectedPiece.Equals(null)) {
 			selectedSquare = s;
-			MakeMove (selectedPiece, selectedSquare);
+			try {
+				MakeMove (GetMove(selectedSquare));
+			} 
+			catch {
+				print ("Invalid Move");
+			}
 		}
 	}
 
-	public void MakeMove(Piece p, Square s){
-	/*	if(p.GetLegalMoves().Contains(s)){
-			DeleteSquares ();
-			p.Move(s);
-			blackTurn = !blackTurn;
+	private Move GetMove(Square s){
+		Move move = selectedPieceLegalMoves.Find (m => m.movePoisition.Equals (s));
+		if (move) {
+			return move;
 		} else {
-			DeselectPiece ();
+			return null;
 		}
-	*/
+	}
+
+	public void MakeMove(Move m){
+		board = new Board (board, m);
+		boardG.DrawBoard ();
 	}
 
 	private void DeleteSquares(){
