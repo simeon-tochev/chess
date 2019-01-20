@@ -41,6 +41,7 @@ public abstract class Piece  {
 		this.row += (char)row;
 		this.color = color;
 		this.board = board;
+        this.position = board.GetSquare(col, row);
 	//	CalculateLegalMoves ();
 	}
 
@@ -55,8 +56,9 @@ public abstract class Piece  {
 		this.row = row;
 		this.color = color;
 		this.board = board;
-	//	CalculateLegalMoves ();
-	}
+        this.position = board.GetSquare((int)(col - 'A'),(int)(row - '1'));
+        //	CalculateLegalMoves ();
+    }
 
 	// Methods
 

@@ -13,43 +13,44 @@ public class King : Piece {
 	// Methods
 
 	public override void CalculateLegalMoves(){
-		legalMoves.Clear ();
-		if (col < 7 && row < 7) {
+        MonoBehaviour.print("White King added at " + position);
+        legalMoves.Clear ();
+		if (col < 'H' && row < '8') {
 			if (!position.GetUpperRight().isOccupied() || position.GetUpperRight ().GetOccupant ().GetColor () != this.color) {
 				legalMoves.Add (GenerateMove(position.GetUpperRight()));
 			}
 		}
-		if (col < 7 && row > 0) {
+		if (col < 'H' && row > '1') {
 			if (!position.GetLowerRight().isOccupied() || position.GetLowerRight ().GetOccupant ().GetColor () != this.color) {
 				legalMoves.Add (GenerateMove(position.GetLowerRight()));
 			}
 		}
-		if (col > 0 && row > 0) {
+		if (col > 'A' && row > '1') {
 			if (!position.GetLowerLeft().isOccupied() || position.GetLowerLeft ().GetOccupant ().GetColor () != this.color) {
 				legalMoves.Add (GenerateMove(position.GetLowerLeft()));
 			}
 		}
-		if (col > 0 && row < 7) {
+		if (col > 'A' && row < '8') {
 			if (!position.GetUpperLeft().isOccupied() || position.GetUpperLeft ().GetOccupant ().GetColor () != this.color) {
 				legalMoves.Add (GenerateMove(position.GetUpperLeft()));
 			}
 		}
-		if (row < 7) {
+		if (row < '8') {
 			if (!position.GetUpper().isOccupied() || position.GetUpper ().GetOccupant ().GetColor () != this.color) {
 				legalMoves.Add (GenerateMove(position.GetUpper()));
 			}
 		}
-		if (col > 0) {
+		if (col > 'A') {
 			if (!position.GetLeft().isOccupied() || position.GetLeft ().GetOccupant ().GetColor () != this.color) {
 				legalMoves.Add (GenerateMove(position.GetLeft()));
 			}
 		}
-		if (col < 7) {
+		if (col < 'H') {
 			if (!position.GetRight().isOccupied() || position.GetRight ().GetOccupant ().GetColor () != this.color) {
 				legalMoves.Add (GenerateMove(position.GetRight()));
 			}
 		}
-		if (row > 0) {
+		if (row > '1') {
 			if (!position.GetLower().isOccupied() || position.GetLower ().GetOccupant ().GetColor () != this.color) {
 				legalMoves.Add (GenerateMove(position.GetLower()));
 			}

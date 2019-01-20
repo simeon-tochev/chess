@@ -12,8 +12,6 @@ public class Player : MonoBehaviour {
 
 	// Constructors
 
-	public Player(){
-	}
 
 	// Methods
 

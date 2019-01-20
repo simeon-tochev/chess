@@ -9,7 +9,7 @@ public class Board {
 						"pppppppp",
 						"EEEEEEEE",
 						"EEEEEEEE",
-						"EEEEKEEE",
+						"EEEEEEEE",
 						"EEEEEEEE",
 						"PPPPPPPP",
 						"RNBQKBNR",
@@ -88,13 +88,14 @@ public class Board {
 				}
 			}
 		}
+        
 		CalculateMoves ();
 	}
 
 	private void InitializeSquares(){
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				squares [j, i] = new Square (j, i);
+				squares [j, i] = new Square (j, i, this);
 			}
 		}
 	}
@@ -158,7 +159,7 @@ public class Board {
 	public Square GetLeft(Square sq){
 		return squares [sq.col - 1, sq.row];
 	}
-
+    +-
 	public Square GetUpperLeft(Square sq){
 		return squares [sq.col - 1, sq.row + 1];
 	}

@@ -25,7 +25,7 @@ public class Square  {
 		
 	}
 
-	public Square(int col, int row){
+	public Square(int col, int row, Board b){
 		char c = (char)col;
 		c += 'A';
 		this.col = c;
@@ -35,15 +35,17 @@ public class Square  {
 		string s = c.ToString() + r.ToString();
 		isBlack = ((row + col) % 2 == 0); 
 		abbreviation = s;
+        this.currentBoard = b;
 	}
 
-	public Square(char col, char row){
+	public Square(char col, char row, Board b){
 		this.col = col;
 		this.row = row;
 		string s = col.ToString() + row.ToString();
 		abbreviation = s;
 		isBlack = ((int)row + (int)col) % 2 == 0;
-	}
+        this.currentBoard = b;
+    }
 
 	// Methods
 
