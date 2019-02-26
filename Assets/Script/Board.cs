@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+
 
 public class Board {
 
@@ -20,14 +20,14 @@ public class Board {
 
 	public List<Piece> pieces = new List<Piece>();
 
-	public Player whitePlayer = new Player();
-	public Player blackPlayer = new Player();
+	public Player whitePlayer = new Player(false);
+	public Player blackPlayer = new Player(true);
 
 	// Constructors
 
 	public Board () {
 		InitializeSquares ();
-		CalculateMoves ();
+	//	CalculateMoves ();
 	}
 
 	public Board (Board b, Move m) {
@@ -89,7 +89,7 @@ public class Board {
 			}
 		}
         
-		CalculateMoves ();
+		// CalculateMoves ();
 	}
 
 	private void InitializeSquares(){
@@ -122,58 +122,44 @@ public class Board {
 	}
 
 	public bool WhiteChecked(){
-		Piece whiteKing = pieces.Find (k => k.pieceName == "King_White");
-		Player blackPlayer = GameObject.Find ("BlackPlayer").GetComponent<Player> ();
-		foreach (Move move in blackPlayer.legalMoves) {
-			if (move.movePoisition == whiteKing.position && move.takeMove) {
-				return true;
-			}
-		}
-		return false;
+        return false; 
 	}
 
 	public bool BlackChecked(){
-		Piece blackKing = pieces.Find (k => k.pieceName == "King_Black");
-		Player whitePlayer = GameObject.Find ("WhitePlayer").GetComponent<Player> ();
-		foreach (Move move in blackPlayer.legalMoves) {
-			if (move.movePoisition == blackKing.position && move.takeMove) {
-				return true;
-			}
-		}
-		return false;
+        return false;
 	}
 		
 
 	public Square GetUpper(Square sq){
-		return squares [sq.col, sq.row + 1];
+		return squares [sq.col - 'A', sq.row - '1' + 1];
 	}
 
 	public Square GetLower(Square sq){
-		return squares [sq.col, sq.row - 1];
+		return squares [sq.col - 'A', sq.row - '1' - 1];
 	}
 
 	public Square GetRight(Square sq){
-		return squares [sq.col + 1, sq.row];
+		return squares [sq.col - 'A' + 1, sq.row - '1'];
 	}
 
 	public Square GetLeft(Square sq){
-		return squares [sq.col - 1, sq.row];
+		return squares [sq.col - 'A' - 1, sq.row - '1'];
 	}
-    +-
+    
 	public Square GetUpperLeft(Square sq){
-		return squares [sq.col - 1, sq.row + 1];
+		return squares [sq.col - 'A' - 1, sq.row - '1' + 1];
 	}
 
 	public Square GetLowerLeft(Square sq){
-		return squares [sq.col - 1, sq.row - 1];
+		return squares [sq.col - 'A' - 1, sq.row - '1' - 1];
 	}
 
 	public Square GetUpperRight(Square sq){
-		return squares [sq.col + 1, sq.row + 1];
+		return squares [sq.col - 'A' + 1, sq.row - '1' + 1];
 	}
 
 	public Square GetLowerRight(Square sq){
-		return squares [sq.col + 1, sq.row - 1];
+		return squares [sq.col - 'A' + 1, sq.row - '1' - 1];
 	}
 
 	public Square GetSquare(int c, int r){

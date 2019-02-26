@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-	[SerializeField]
 	private bool color;
 
 	public ArrayList pieces = new ArrayList();
@@ -12,6 +11,9 @@ public class Player : MonoBehaviour {
 
 	// Constructors
 
+    public Player(bool color) {
+        this.color = color;
+    }
 
 	// Methods
 
