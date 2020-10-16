@@ -13,7 +13,7 @@ public class MoveManager : MonoBehaviour {
 	public Board board;
 	public BoardGenerator boardG;
 
-	List<Move> selectedPieceLegalMoves;
+	List<Move> selectedPieceLegalMoves = new List<Move>();
 	ArrayList placedSquares = new ArrayList();
 
 	[SerializeField]
@@ -25,7 +25,12 @@ public class MoveManager : MonoBehaviour {
 		print ("Succesfully selected " + p.pieceName);
 		DeleteSquares ();
 		selectedPiece = p;
-		selectedPieceLegalMoves = p.legalMoves;
+        foreach(Move m in board.legalMoves) {
+            if(m.pieceToMove == p) {
+                selectedPieceLegalMoves.Add(m);
+            }
+        }
+
 		foreach (Move sq in selectedPieceLegalMoves) {
 			GameObject pieceGO = sq.movePoisition.squareMono.gameObject;
 			GameObject greenSquare = GameObject.Instantiate (squarePrefab, pieceGO.transform.position + new Vector3(0f,0f,1f), pieceGO.transform.rotation) as GameObject;

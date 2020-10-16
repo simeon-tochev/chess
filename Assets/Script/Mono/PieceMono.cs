@@ -8,7 +8,12 @@ public class PieceMono : MonoBehaviour {
 
 	public MoveManager moveManager;
 
-	void OnMouseDown(){
+    private void Start() {
+        moveManager = GameObject.Find("MoveManager").GetComponent<MoveManager>();
+    }
+
+    void OnMouseDown(){
+        print("Clicked on: " + piece.pieceName);
 		moveManager.SelectPiece (piece);
 	}
 

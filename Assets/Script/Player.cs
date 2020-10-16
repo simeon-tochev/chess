@@ -9,7 +9,13 @@ public class Player : MonoBehaviour {
 	public ArrayList pieces = new ArrayList();
 	public List<Move> legalMoves = new List<Move> ();
 
-	// Constructors
+    public Board board;
+
+    private void Start() {
+        board = GameObject.Find("BoardGenerator").GetComponent<BoardGenerator>().board;
+    }
+
+    // Constructors
 
     public Player(bool color) {
         this.color = color;
@@ -34,11 +40,7 @@ public class Player : MonoBehaviour {
 	}
 
 	public void AddLegalMoves(){
-		foreach (Piece p in pieces) {
-			foreach (Move m in p.legalMoves) {
-				legalMoves.Add (m);
-			}
-		}
+
 	}
 
 }
