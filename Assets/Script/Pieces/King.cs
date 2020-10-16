@@ -5,15 +5,28 @@ using UnityEngine;
 public class King : Piece {
 
 
-	// Constructors
+    // Constructors
 
-	public King (char col, char row, bool color, Board b) : base(col, row, color, b) { }
+    public King(char col, char row, bool color, Board b) : base(col, row, color, b) { }
+
+    public King(Piece p, Board b) : base(p, b) { }
 
 	// Methods
 
 	public override List<Move> CalculateLegalMoves(){
         List<Move> legalMoves = new List<Move>();
 
+
+        /*
+        if (!hasMoved)
+            if (color) {
+                
+            } else {
+
+            }
+       */
+        
+        
 		if (col < 'H' && row < '8') {
 			if (!position.GetUpperRight().isOccupied()  ) {
 				legalMoves.Add (GenerateMove(position.GetUpperRight()));
@@ -55,6 +68,7 @@ public class King : Piece {
             }
         }
 		if (col > 'A') {
+            
 			if (!position.GetLeft().isOccupied()) {
 				legalMoves.Add (GenerateMove(position.GetLeft()));
 			}

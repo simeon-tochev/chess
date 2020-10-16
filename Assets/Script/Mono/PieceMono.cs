@@ -8,13 +8,22 @@ public class PieceMono : MonoBehaviour {
 
 	public MoveManager moveManager;
 
+    public char col;
+    public char row;
+    public string name;
+
     private void Start() {
         moveManager = GameObject.Find("MoveManager").GetComponent<MoveManager>();
     }
 
     void OnMouseDown(){
-        print("Clicked on: " + piece.pieceName);
 		moveManager.SelectPiece (piece);
 	}
+
+    private void Update() {
+        col = piece.col;
+        row = piece.row;
+        name = piece.pieceName;
+    }
 
 }

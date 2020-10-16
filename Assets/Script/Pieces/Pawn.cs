@@ -9,13 +9,15 @@ public class Pawn : Piece {
 
 	public Pawn(char col, char row, bool color, Board b) : base(col, row, color, b) { }
 
-	// Methods
+    public Pawn (Piece p, Board b) : base(p, b) { }
 
-	public override List<Move> CalculateLegalMoves(){
+    // Methods
+
+    public override List<Move> CalculateLegalMoves(){
         List<Move> legalMoves = new List<Move>();
 		if (!color) {
 			if (row == '2'  && !color) {
-				if (!position.GetUpper().GetUpper().isOccupied()) {
+				if (!position.GetUpper().GetUpper().isOccupied() && !position.GetUpper().isOccupied()) {
 					legalMoves.Add (GenerateMove(position.GetUpper().GetUpper()));
 				}
 			}
@@ -24,17 +26,17 @@ public class Pawn : Piece {
 			}
 			if (col < 'H' && position.GetUpperRight ().isOccupied()) {
 				if (position.GetUpperRight ().GetOccupant ().color != color) {
-					legalMoves.Add (GenerateMove(position.GetUpperRight ()));
+					legalMoves.Add (GenerateMove(position.GetUpperRight (), position.GetUpperRight().occupant));
 				}
 			}
 			if (col > 'A' && position.GetUpperLeft ().isOccupied()) {
 				if (position.GetUpperLeft ().GetOccupant ().color != color) {
-					legalMoves.Add (GenerateMove(position.GetUpperLeft ()));
+					legalMoves.Add (GenerateMove(position.GetUpperLeft (), position.GetUpperLeft().occupant));
 				}
 			}
 		} else {
-			if (row == '6' && color) {
-				if (!position.GetLower().GetLower().isOccupied ()) {
+			if (row == '7' && color) {
+				if (!position.GetLower().GetLower().isOccupied () && !position.GetLower().isOccupied()) {
 					legalMoves.Add (GenerateMove(position.GetLower().GetLower()));
 				}
 			}
@@ -43,12 +45,12 @@ public class Pawn : Piece {
 			}
 			if (col < 'H' && position.GetLowerRight ().isOccupied()) {
 				if (position.GetLowerRight ().GetOccupant ().color != color) {
-					legalMoves.Add (GenerateMove(position.GetLowerRight ()));
+					legalMoves.Add (GenerateMove(position.GetLowerRight (), position.GetLowerRight().occupant));
 				}
 			}
 			if (col > 'A' && position.GetLowerLeft ().isOccupied()) {
 				if (position.GetLowerLeft ().GetOccupant ().color != color) {
-					legalMoves.Add (GenerateMove(position.GetLowerLeft ()));
+					legalMoves.Add (GenerateMove(position.GetLowerLeft (), position.GetLowerLeft().occupant));
 				}
 			}
 		}

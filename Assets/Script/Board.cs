@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 
 public class Board {
@@ -20,7 +22,7 @@ public class Board {
 
     public List<Piece> pieces = new List<Piece>();
 
-    public Move lastMove;
+ //   public Move lastMove;
 
     /*
 	public List<Piece> blackPieces = new List<Piece>();
@@ -36,6 +38,8 @@ public class Board {
 
     public List<Move> legalMoves;
 
+    public char gameState = '1'; // 1 - Game on, 2 - Black CheckMated, 3 - White CheckMated, 4 - Black Resigned, 5 - White Resigned, 6 - White StaleMated, 7 - Black Stalemated, 8 - Draw
+
 	// Constructors
 
 	public Board () {
@@ -44,15 +48,20 @@ public class Board {
 	}
 
     public Board(Board b) {
-        squares = b.squares;
-        pieces = b.pieces;
-        lastMove = b.lastMove;
+        InitializeSquares();
+        pieces = new List<Piece>();
+        
+        foreach (Piece p in b.pieces) {
+            pieces.Add(p.Clone(this));
+        }
+
         blackToPlay = b.blackToPlay;
-        legalMoves = b.legalMoves;
+        legalMoves = new List<Move>();
     }
 
+    /*
 	public Board (Board b, Move m) {
-
+        /// To fix
 		squares = b.squares;
         pieces = b.pieces;
         blackToPlay = !b.blackToPlay;
@@ -61,6 +70,7 @@ public class Board {
 	//	CalculateMoves ();
 	//	b.pieces. .SetPosition (m.movePoisition);
 	}
+    */
 
     public Board(string[] b, bool blackToPlay) {
 		InitializeSquares ();
@@ -109,9 +119,10 @@ public class Board {
 			}
 		}
 
-        lastMove = Move.EMPTY_MOVE;
+     //   lastMove = Move.EMPTY_MOVE;
         this.blackToPlay = blackToPlay;
 
+     //   CalculateMoves();
         CalculateLegalMoves();
 	}
 
@@ -135,7 +146,23 @@ public class Board {
                 legalMoves.AddRange(p.CalculateLegalMoves());
             }
         }
-	}
+        if (KCastleCheck(blackToPlay)) {
+            legalMoves.Add(new Move(blackToPlay, 1));
+        }
+        if (QCastleCheck(blackToPlay)) {
+            legalMoves.Add(new Move(blackToPlay, 2));
+        }
+    }
+
+    public List<Move> GetMoves(bool c) {
+        List<Move> moves = new List<Move>();
+        foreach (Piece p in pieces) {
+            if (p.color == c) {
+                moves.AddRange(p.CalculateLegalMoves());
+            }
+        }
+        return moves;
+    }
 
     public void CalculateLegalMoves() {
         CalculateMoves();
@@ -143,7 +170,8 @@ public class Board {
         foreach (Move m in legalMoves) {
             Board b = new Board(this);
             b.MakeMoveEmptyMoves(m);
-            if (b.IsChecked(blackToPlay)) {
+            b.CalculateMoves();
+            if (!b.IsChecked(blackToPlay)) {
                 newLegalMoves.Add(m);
             }
         }
@@ -182,48 +210,62 @@ public class Board {
 		return squares [sq.col - 'A' + 1, sq.row - '1' - 1];
 	}
 
+
+    /// To Fix with chars eventually..
+    /// 
+
 	public Square GetSquare(int c, int r){
 		return squares [c, r];
 	}
 
     public void MakeMoveEmptyMoves(Move m) {
-                legalMoves.Clear();
         if (m.castleMove) {
             if (m.castle == 1) {
                 if (m.blackTurn) {
                     pieces.Find(p => p.pieceName.Equals("King_Black")).SetPosition(squares[6, 7]);
-                    pieces.Find(p => p.pieceName.Equals("Rook_Black")).SetPosition(squares[5, 7]);
+                    pieces.Find(p => p.pieceName.Equals("Rook_Black") && p.col == 'H').SetPosition(squares[5, 7]);
+                    squares[7, 7].occupant = null;
+                    squares[4, 7].occupant = null;
                 }
                 else {
                     pieces.Find(p => p.pieceName.Equals("King_White")).SetPosition(squares[6, 0]);
-                    pieces.Find(p => p.pieceName.Equals("Rook_White")).SetPosition(squares[5, 0]);
+                    pieces.Find(p => p.pieceName.Equals("Rook_White") && p.col == 'H').SetPosition(squares[5, 0]);
+                    squares[7, 0].occupant = null;
+                    squares[4, 0].occupant = null;
                 }
             }
             else {
                 if (m.blackTurn) {
                     pieces.Find(p => p.pieceName.Equals("King_Black")).SetPosition(squares[2, 7]);
-                    pieces.Find(p => p.pieceName.Equals("Rook_Black")).SetPosition(squares[3, 7]);
+                    pieces.Find(p => p.pieceName.Equals("Rook_Black") && p.col == 'A').SetPosition(squares[3, 7]);
+                    squares[0, 7].occupant = null;
+                    squares[4, 7].occupant = null;
                 }
                 else {
                     pieces.Find(p => p.pieceName.Equals("King_White")).SetPosition(squares[2, 0]);
-                    pieces.Find(p => p.pieceName.Equals("Rook_White")).SetPosition(squares[3, 0]);
+                    pieces.Find(p => p.pieceName.Equals("Rook_White") && p.col == 'A').SetPosition(squares[3, 0]);
+                    squares[0, 0].occupant = null;
+                    squares[4, 0].occupant = null;
                 }
             }
+            blackToPlay = !blackToPlay;
             return;
         }
 
-        pieces.Find(p => p.Equals(m.pieceToMove)).SetPosition(m.movePoisition);
         if (m.takeMove) {
-            pieces.Remove(m.pieceToTake);
+            pieces.Remove(FindPieceOnBoard(m.colTo, m.rowTo));
         }
-
+        FindPieceOnBoard(m.colFrom, m.rowFrom).SetPosition(m.colTo, m.rowTo);
+        FindPieceOnBoard(m.colFrom, m.rowFrom).hasMoved = true;
+        GetSquare(m.colFrom - 'A', m.rowFrom - '1').occupant = null;
+        blackToPlay = !blackToPlay;
 
     }
 
     public void MakeMove(Move m) {
         MakeMoveEmptyMoves(m);
         CalculateLegalMoves();
-
+        GameStateCheck();
     }
 
     public Board GetNextBoard(Move m) {
@@ -239,19 +281,114 @@ public class Board {
     public bool IsChecked(bool kingColor) {
         if (kingColor) {
             foreach (Move m in legalMoves) {
-                if (m.pieceToTake.pieceName.Equals("King_Black")) {
-                    return true;
+                if (m.takeMove) {
+                    if (FindPieceOnBoard(m.colTo, m.rowTo).pieceName.Equals("King_Black")) {
+                        return true;
+                    }
                 }
-                
             }
         } else {
             foreach (Move m in legalMoves) {
-                if (m.pieceToTake.pieceName.Equals("King_White")) {
-                    return true;
+                if (m.takeMove) {
+                    if (FindPieceOnBoard(m.colTo, m.rowTo).pieceName.Equals("King_White")) {
+                        return true;
+                    }
                 }
             }
         }
         return false;
+    }
+
+    
+
+    public Piece FindPieceOnBoard(char col, char row) {
+        return GetSquare(col - 'A', row - '1').GetOccupant();
+    }
+
+    public Square FindEquivalentSquare(Square s) {
+        if(s == null) {
+            return null;
+        }
+        return GetSquare(s.col - 'A', s.row - '1');
+    }
+
+    public string ToString() {
+        string str = "";
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                str += squares[i, j].toString();
+            }
+            str += "\n";
+        }
+        return str;
+    }
+
+    public void GameStateCheck() {
+        if(legalMoves.Count == 0) {
+            if (blackToPlay) {
+                Piece k = pieces.Find(p => p.pieceName == "King_Black");
+                if (IsAttacked(k.position, false)){
+                    gameState = '2';
+                } else {
+                    gameState = '6';
+                }
+            } else {
+                Piece k = pieces.Find(p => p.pieceName == "King_White");
+                if (IsAttacked(k.position, true)) {
+                    gameState = '3';
+                }
+                else {
+                    gameState = '7';
+                }
+            }
+        }
+    }
+
+
+    /// Figure out a way to implement pawn attacking behaviour
+    public bool IsAttacked(Square sq, bool color) {
+        List<Move> moves = GetMoves(color);
+        foreach(Move m in moves) {
+            if(GetSquare(m.colTo - 'A', m.rowTo - '1') == sq){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool QCastleCheck(bool color) {
+        Piece k = null;
+        Piece r = null;
+        if (color) {
+            k = pieces.Find(p => p.pieceName == "King_Black");
+            r = pieces.Find(p => p.col == 'A' && p.row == '8' && p.pieceName == "Rook_Black");
+        } else {
+            k = pieces.Find(p => p.pieceName == "King_White");
+            r = pieces.Find(p => p.col == 'A' && p.row == '1' && p.pieceName == "Rook_White");
+        }
+        if (k == null || k.hasMoved ) { return false; }
+        if (r == null || r.hasMoved) { return false; }
+        if (k.position.GetLeft().isOccupied() || k.position.GetLeft().GetLeft().isOccupied() || k.position.GetLeft().GetLeft().GetLeft().isOccupied()) { return false; }
+        if (IsAttacked(k.position, !color) || IsAttacked(k.position.GetLeft(), !color) || IsAttacked(k.position.GetLeft().GetLeft(), !color) || IsAttacked(k.position.GetLeft().GetLeft().GetLeft(), !color)) { return false; }
+        return true;
+    }
+
+    public bool KCastleCheck (bool color) {
+        Piece k = null;
+        Piece r = null;
+        if (color) {
+            k = pieces.Find(p => p.pieceName == "King_Black");
+            r = pieces.Find(p => p.col == 'H' && p.row == '8' && p.pieceName == "Rook_Black");
+        }
+        else {
+            k = pieces.Find(p => p.pieceName == "King_White");
+            r = pieces.Find(p => p.col == 'H' && p.row == '1' && p.pieceName == "Rook_White");
+        }
+        if (k == null || k.hasMoved) { return false; }
+        if (r == null || r.hasMoved) { return false; }
+        if (k.position.GetRight().isOccupied() || k.position.GetRight().GetRight().isOccupied()) { return false; }
+        if (IsAttacked(k.position, !color) || IsAttacked(k.position.GetRight(), !color) || IsAttacked(k.position.GetRight().GetRight(), !color) ) { return false; }
+        return true;
     }
 
 //	public Square GetSquare(string pos){

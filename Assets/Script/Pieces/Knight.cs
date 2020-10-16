@@ -8,9 +8,11 @@ public class Knight : Piece {
 
 	public Knight (char col, char row, bool color, Board b) : base(col, row, color, b) {}
 
-	// Methods
+    public Knight (Piece p, Board b) : base(p, b) { }
 
-	public override List<Move> CalculateLegalMoves(){
+    // Methods
+
+    public override List<Move> CalculateLegalMoves(){
 
         List<Move> legalMoves = new List<Move>();
 		if (row < '7') {

@@ -21,20 +21,29 @@ public class MoveManager : MonoBehaviour {
 
 	bool blackTurn = false;
 
-	public void SelectPiece(Piece p){
-		print ("Succesfully selected " + p.pieceName);
+    private void Start() {
+        boardG = GameObject.Find("BoardGenerator").GetComponent<BoardGenerator>();
+        board = boardG.board;
+    }
+
+    public void SelectPiece(Piece p){
+	//	print ("Succesfully selected " + p.pieceName);
 		DeleteSquares ();
-		selectedPiece = p;
+        selectedPieceLegalMoves.Clear();
+        selectedPiece = p;
         foreach(Move m in board.legalMoves) {
-            if(m.pieceToMove == p) {
+            if(board.FindPieceOnBoard(m.colFrom,m.rowFrom) == p) {
                 selectedPieceLegalMoves.Add(m);
             }
         }
 
 		foreach (Move sq in selectedPieceLegalMoves) {
-			GameObject pieceGO = sq.movePoisition.squareMono.gameObject;
-			GameObject greenSquare = GameObject.Instantiate (squarePrefab, pieceGO.transform.position + new Vector3(0f,0f,1f), pieceGO.transform.rotation) as GameObject;
+            Square s = board.GetSquare(sq.colTo - 'A', sq.rowTo - '1');
+            GameObject squareTo = s.squareMono.gameObject;
+			GameObject greenSquare = Instantiate (squarePrefab, squareTo.transform.position + new Vector3(0f,0f,-2f), squareTo.transform.rotation) as GameObject;
 			greenSquare.GetComponent<SpriteRenderer> ().color = Color.green;
+            greenSquare.GetComponent<SquareMono>().square = s;
+
 			placedSquares.Add (greenSquare);
 		}
 	
@@ -47,31 +56,37 @@ public class MoveManager : MonoBehaviour {
 	}
 
 	public void SelectSquare(Square s){
-		print ("Selected Square");
-		if (!selectedPiece.Equals(null)) {
+        //	print ("Selected Square: " + s.col.ToString() + s.row.ToString());
+        if (selectedPiece != null) {
 			selectedSquare = s;
 			try {
-				MakeMove (GetMove(selectedSquare));
+                Move m = GetMove(selectedSquare);
+            //   print(m.colTo.ToString() + m.rowTo.ToString());
+                MakeMove(m);
+            //    print(board.ToString());
 			} 
 			catch {
+                DeselectPiece();
 				print ("Invalid Move");
 			}
 		}
 	}
 
 	private Move GetMove(Square s){
-		Move move = selectedPieceLegalMoves.Find (m => m.movePoisition.Equals (s));
-		if (move) {
+		Move move = selectedPieceLegalMoves.Find (m => s == board.GetSquare(m.colTo - 'A', m.rowTo - '1'));
+        if (move != null) {
 			return move;
 		} else {
 			return null;
+
 		}
 	}
 
 	public void MakeMove(Move m){
-		board = new Board (board, m);
-		boardG.DrawBoard ();
-	}
+        board.MakeMove(m);
+        DeselectPiece();
+        boardG.DrawPieces();
+    }
 
 	private void DeleteSquares(){
 		foreach (GameObject sq in placedSquares) {

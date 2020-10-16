@@ -9,9 +9,11 @@ public class Queen : Rook {
 
 	public Queen (char col, char row, bool color, Board b) : base(col, row, color, b) { }
 
-	// Methods
+    public Queen (Piece p, Board b) : base(p, b) { }
 
-	public override List<Move> CalculateLegalMoves (){
+    // Methods
+
+    public override List<Move> CalculateLegalMoves (){
 
         List<Move> legalMoves = base.CalculateLegalMoves();
         for (int k = 1; k < 8; k++) {
@@ -35,7 +37,7 @@ public class Queen : Rook {
                 if (!board.squares[col - k - 'A', row + k - '1'].isOccupied()) {
                     legalMoves.Add(GenerateMove(board.squares[col - k - 'A', row + k - '1']));
                 }
-                else if (board.squares[col - k - 'A', row + k].GetOccupant().color != color) {
+                else if (board.squares[col - k - 'A', row + k - '1'].GetOccupant().color != color) {
                     legalMoves.Add(GenerateMove(board.squares[col - k - 'A', row + k - '1'], board.squares[col - k - 'A', row + k - '1'].GetOccupant()));
                     break;
                 }
@@ -65,8 +67,8 @@ public class Queen : Rook {
         for (int k = 1; k < 8; k++) {
 
             if (col + k < 'I' && row - k >= '1') {
-                if (!board.squares[col + k - 'A', row - k].isOccupied()) {
-                    legalMoves.Add(GenerateMove(board.squares[col + k, row - k - '1']));
+                if (!board.squares[col + k - 'A', row - k - '1'].isOccupied()) {
+                    legalMoves.Add(GenerateMove(board.squares[col + k - 'A', row - k - '1']));
                 }
                 else if (board.squares[col + k - 'A', row - k - '1'].GetOccupant().color != color) {
                     legalMoves.Add(GenerateMove(board.squares[col + k - 'A', row - k - '1'], board.squares[col + k - 'A', row - k - '1'].GetOccupant()));

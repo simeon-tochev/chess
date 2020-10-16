@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public abstract class Piece  {
 
@@ -17,6 +19,8 @@ public abstract class Piece  {
 	public MoveManager 	moveManager;
 
 	public Board 		board;
+
+    public bool hasMoved = false;
 
 
 	// Abstract Methods and Properties
@@ -39,6 +43,7 @@ public abstract class Piece  {
 		this.color = color;
 		this.board = board;
         this.position = board.GetSquare(col, row);
+        position.occupant = this;
 	//	CalculateLegalMoves ();
 	}
 
@@ -54,7 +59,19 @@ public abstract class Piece  {
 		this.color = color;
 		this.board = board;
         this.position = board.GetSquare((int)(col - 'A'),(int)(row - '1'));
+        position.occupant = this;
         //	CalculateLegalMoves ();
+    }
+
+    public Piece(Piece p, Board b) {
+        pieceName = p.pieceName;
+        col = p.col;
+        row = p.row;
+        color = p.color;
+        board = b;
+        position = b.GetSquare(p.col - 'A', p.row - '1');
+        position.occupant = this;
+     //   Debug.Log(pieceName + " added");
     }
 
 	// Methods
@@ -67,13 +84,34 @@ public abstract class Piece  {
 		return new Move (color, this, position, movePosition, takenPiece);
 	}
 
+    public Piece Clone(Board b) {
+        Type t = GetType();
+     //   Debug.Log(t.Name);
+        switch (t.Name) {
+            case "King": return new King(this, b);
+            case "Queen": return new Queen(this, b);
+            case "Rook": return new Rook(this, b);
+            case "Knight": return new Knight(this, b);
+            case "Bishop": return new Bishop(this, b);
+            case "Pawn": return new Pawn(this, b); 
+            default: return null;
+        }
+    }
+
 
 	public void SetPosition(Square pos){
 		position = pos;
 		col = pos.col;
 		row = pos.row;
-		CalculateLegalMoves ();
+        position.occupant = this;
 	}
+
+    public void SetPosition(char col, char row) {
+        position = board.GetSquare(col - 'A', row - '1');
+        this.col = col;
+        this.row = row;
+        position.occupant = this;
+    }
 
 	public override string ToString (){
 		return pieceName;

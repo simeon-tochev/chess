@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Square  {
 
@@ -50,8 +51,8 @@ public class Square  {
 	// Methods
 
 	public Piece GetOccupant(){
-	//	return occupant;
-		return null;
+		return occupant;
+	//	return null;
 	}
 
 	public override string ToString () {
@@ -102,4 +103,26 @@ public class Square  {
 	public Square GetLowerRight(){
 		return currentBoard.GetLowerRight(this);
 	}
+
+    public string toString() {
+        if (!isOccupied()) {
+            return "E";
+        }
+        String str = occupant.pieceName;
+        switch (str) {
+            case "King_White": return "k";
+            case "King_Black": return "K";
+            case "Queen_White": return "q";
+            case "Queen_Black": return "Q";
+            case "Rook_White": return "r";
+            case "Rook_Black": return "R";
+            case "Knight_White": return "n";
+            case "Knight_Black": return "N";
+            case "Bishop_White": return "b";
+            case "Bishop_Black": return "B";
+            case "Pawn_White": return "p";
+            case "Pawn_Black": return "P";
+            default: return null;
+        }
+    }
 }

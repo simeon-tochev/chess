@@ -9,9 +9,11 @@ public class Rook : Piece {
 
 	public Rook (char col, char row, bool color, Board b) : base(col, row, color, b) {  }
 
-	// Methods
+    public Rook(Piece p, Board b) : base(p, b) { }
 
-	public override List<Move> CalculateLegalMoves (){
+    // Methods
+
+    public override List<Move> CalculateLegalMoves (){
 
         List<Move> legalMoves = new List<Move>();
 		for (int k = 1; k < 8; k++) {
