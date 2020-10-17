@@ -79,6 +79,20 @@ public class Move {
         enPassant = false;
     }
 
+    public Move(bool turn, Piece piece, Square current, Square moved, bool enPassant) {
+        blackTurn = turn;
+        colFrom = current.col;
+        colTo = moved.col;
+        rowFrom = current.row;
+        rowTo = moved.row;
+
+        takeMove = false;
+        promoteMove = false;
+        castleMove = false;
+        this.enPassant = true;
+    //    Debug.Log("EnPassant: " + enPassant);
+    }
+
     public Move(bool turn, int castle) {
         blackTurn = turn;
         this.castle = castle;

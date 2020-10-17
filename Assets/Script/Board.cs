@@ -17,6 +17,19 @@ public class Board {
                         "RNBQKBNR",
                     }, false
 	);
+
+    public static readonly Board TEST_BOARD = new Board(
+        new string[]{   "rnbqkbnr",
+                        "EEEEEEEE",
+                        "EEEEEEEE",
+                        "EEEEEEEE",
+                        "EEEEEEpE",
+                        "EEEEEEEE",
+                        "EEEEEPEE",
+                        "RNBQKEEE",
+                    }, false
+
+    );
 		
 	public Square[,] squares = new Square[8,8];
 
@@ -254,15 +267,46 @@ public class Board {
 
         if (m.takeMove) {
             pieces.Remove(FindPieceOnBoard(m.colTo, m.rowTo));
+        } else if (m.enPassant) {
+        //    Debug.Log("En Passant");
+            if (blackToPlay) {
+                pieces.Remove(FindPieceOnBoard(m.colTo, '4'));
+            } else {
+      //          Debug.Log("Removing " + FindPieceOnBoard(m.colTo, '5').pieceName);
+                pieces.Remove(FindPieceOnBoard(m.colTo, '5'));
+            }
+
         }
-        FindPieceOnBoard(m.colFrom, m.rowFrom).SetPosition(m.colTo, m.rowTo);
-        FindPieceOnBoard(m.colFrom, m.rowFrom).hasMoved = true;
+        Piece pieceToMove = FindPieceOnBoard(m.colFrom, m.rowFrom);
+        pieceToMove.SetPosition(m.colTo, m.rowTo);
+        pieceToMove.hasMoved = true;
         GetSquare(m.colFrom - 'A', m.rowFrom - '1').occupant = null;
+
+        if (m.promoteMove) {
+            int index = pieces.IndexOf(pieceToMove);
+            switch (m.promoteTo) {
+                case 1: pieces[index] = new Queen(pieceToMove, this); break;
+                case 2: pieces[index] = new Rook(pieceToMove, this); break;
+                case 3: pieces[index] = new Bishop(pieceToMove, this); break;
+                case 4: pieces[index] = new Knight(pieceToMove, this); break;
+            }
+        }
+
+        foreach(Piece p in pieces) {
+            if(p.GetType().Name == "Pawn" && pieceToMove == p && Mathf.Abs(m.rowTo - m.rowFrom) == 2) {
+                p.enPassant = true;
+             //   Debug.Log(p.pieceName + " enPassant");
+            } else {
+                p.enPassant = false;
+            }
+        }
+
         blackToPlay = !blackToPlay;
 
     }
 
     public void MakeMove(Move m) {
+     //   Debug.Log("EnPassant Move: " + m.enPassant.ToString());
         MakeMoveEmptyMoves(m);
         CalculateLegalMoves();
         GameStateCheck();

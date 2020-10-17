@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MoveManager : MonoBehaviour {
 
@@ -21,9 +23,12 @@ public class MoveManager : MonoBehaviour {
 
 	bool blackTurn = false;
 
+    public Text gameState;
+
     private void Start() {
         boardG = GameObject.Find("BoardGenerator").GetComponent<BoardGenerator>();
         board = boardG.board;
+        gameState = GameObject.Find("GameState").GetComponent<Text>();
     }
 
     public void SelectPiece(Piece p){
@@ -65,7 +70,8 @@ public class MoveManager : MonoBehaviour {
                 MakeMove(m);
             //    print(board.ToString());
 			} 
-			catch {
+			catch (Exception e) {
+                print(e.ToString());
                 DeselectPiece();
 				print ("Invalid Move");
 			}
@@ -86,6 +92,18 @@ public class MoveManager : MonoBehaviour {
         board.MakeMove(m);
         DeselectPiece();
         boardG.DrawPieces();
+        
+        switch (board.gameState) {
+            case '1': gameState.text = ""; break;
+            case '2': gameState.text = "Black Checkmated"; break;
+            case '3': gameState.text = "White Checkmated"; break;
+            case '4': gameState.text = "Black Resigned"; break;
+            case '5': gameState.text = "White Resigned"; break;
+            case '6': gameState.text = "Black Stalemated"; break;
+            case '7': gameState.text = "White Stalemated"; break;
+            case '8': gameState.text = "Draw"; break;
+
+        }
     }
 
 	private void DeleteSquares(){
@@ -97,5 +115,17 @@ public class MoveManager : MonoBehaviour {
 	public bool GetTurn(){
 		return blackTurn ;
 	}
+
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.P)){
+            print(board.ToString());
+        }
+
+        if (Input.GetKeyDown(KeyCode.U)) {
+            foreach(Piece p in board.pieces) {
+                print(p.pieceName + " at " + p.position.col.ToString() + p.position.row.ToString());
+            }
+        }
+    }
 
 }

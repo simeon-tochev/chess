@@ -23,9 +23,12 @@ public abstract class Piece  {
     public bool hasMoved = false;
 
 
-	// Abstract Methods and Properties
+    public bool enPassant;
 
-	public abstract List<Move> CalculateLegalMoves();
+
+    // Abstract Methods and Properties
+
+    public abstract List<Move> CalculateLegalMoves();
 
 	// Constructors
 
@@ -64,14 +67,20 @@ public abstract class Piece  {
     }
 
     public Piece(Piece p, Board b) {
-        pieceName = p.pieceName;
+     //   pieceName = p.pieceName;
         col = p.col;
         row = p.row;
         color = p.color;
         board = b;
         position = b.GetSquare(p.col - 'A', p.row - '1');
         position.occupant = this;
-     //   Debug.Log(pieceName + " added");
+        pieceName = GetType().Name;
+        if (color) {
+            pieceName += "_Black";
+        }
+        else {
+            pieceName += "_White";
+        }
     }
 
 	// Methods
