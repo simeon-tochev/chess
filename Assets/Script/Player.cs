@@ -4,43 +4,47 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-	private bool color;
+	public bool color;
 
-	public ArrayList pieces = new ArrayList();
 	public List<Move> legalMoves = new List<Move> ();
+    public List<Piece> pieces = new List<Piece>();
+
+    public MoveManager moveManager;
 
     public Board board;
 
-    private void Start() {
+    public int turnCount = 0;
+
+    protected void Start() {
         board = GameObject.Find("BoardGenerator").GetComponent<BoardGenerator>().board;
+        moveManager = GameObject.Find("MoveManager").GetComponent<MoveManager>();
+        legalMoves = new List<Move>();
     }
 
     // Constructors
 
-    public Player(bool color) {
-        this.color = color;
-    }
-
 	// Methods
 
-	public void AddPiece(Piece p){
-		pieces.Add (p);
-	}
+	protected void GetPieces() {
+        pieces.Clear();
+        foreach(Piece p in board.pieces) {
+            if(p.color == color) {
+                pieces.Add(p);
+            }
+        }
+    }
 
-	public void RemovePiece(Piece p){
-		pieces.Remove (p);
-	}
+	protected void GetLegalMoves(){
+        legalMoves.Clear();
+        foreach (Move m in board.legalMoves) {
+            if (m.blackTurn == color) {
+                legalMoves.Add(m);
+            }
+        }
+    }
 
-	public List<Move> GetLegalMoves(){
-		return legalMoves;
-	}
-
-	public void ClearLegalMoves(){
-		legalMoves.Clear ();
-	}
-
-	public void AddLegalMoves(){
-
-	}
+    protected bool ToPlay() {
+        return board.blackToPlay == color;
+    }
 
 }

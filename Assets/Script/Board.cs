@@ -400,6 +400,15 @@ public class Board {
         return false;
     }
 
+    public bool IsAttacked(Square sq, List<Move> moves) {
+        foreach (Move m in moves) {
+            if (GetSquare(m.colTo - 'A', m.rowTo - '1') == sq) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public bool QCastleCheck(bool color) {
         Piece k = null;
         Piece r = null;
