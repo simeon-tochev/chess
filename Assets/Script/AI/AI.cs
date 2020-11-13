@@ -16,7 +16,14 @@ public abstract class AI : Player
     }
 
     protected void Update() {
-        // PlayMove();
+        if (ToPlay() && board.gameState == '1') {
+            timer += Time.deltaTime;
+            if(timer > timeTothink) {
+                PlayMove();
+            }
+        } else {
+            timer = 0;
+        }
     }
 
     public void PlayMove() {
@@ -32,4 +39,5 @@ public abstract class AI : Player
     protected abstract float BoardEvaluate(Board b);
 
     protected abstract float MoveEvaluate(Move m);
+
 }

@@ -10,12 +10,24 @@ public class BoardEvalAI : AI
     private float bishopEval = 3;
     private float knightEval = 3;
     private float pawnEval = 1;
-    private float squareControlEval = 0.015f;
+    private float squareControlEval = 0.01f;
     private float castleEval = 1f;
 
-    private float checkEval = 0.1f;
+    private float checkEval = 0.5f;
 
-     
+    private float queenAttackEval = 1.5f;
+    private float rookaAttackEval = 0.5f;
+    private float pieceAttackEval = 0.3f;
+    private float pawnAttackEval = 0.1f;
+    
+    private float queenProtectEval = 0.1f;
+    private float rookProtectEval = 0.2f;
+    private float pieceProtectEval = 0.2f;
+    private float pawnProtectEval = 0.1f;
+
+    private float pawnMoveEval = 0.3f;
+
+
     protected override Move GetBestMove() {
         Move maxMove = null;
         float maxEval = 0;
@@ -52,17 +64,26 @@ public class BoardEvalAI : AI
             }
 
             Piece q = board.pieces.Find(p => p.pieceName == "Queen_Black");
-            if(q != null && turnCount < 10 && q.position == board.squares[m.colFrom - 'A', m.rowFrom - '1']) {
-                eval += 1;
+            if(q != null && q.position == board.squares[m.colFrom - 'A', m.rowFrom - '1']) {
+                eval += 0.5f;
             }
+
+            if(board.squares[m.colFrom - 'A', m.rowFrom - '1'].isOccupied() && board.squares[m.colFrom - 'A', m.rowFrom - '1'].occupant.pieceName == "Pawn_Black") {
+                eval -= pawnMoveEval;
+            }
+
         } else {
             if (m.castle > 0) {
                 eval += castleEval;
             }
 
             Piece q = board.pieces.Find(p => p.pieceName == "Queen_White");
-            if (turnCount < 10 && q.position == board.squares[m.colFrom - 'A', m.rowFrom - '1']) {
-                eval -= 1;
+            if (q != null && q.position == board.squares[m.colFrom - 'A', m.rowFrom - '1']) {
+                eval -= 0.5f;
+            }
+
+            if (board.squares[m.colFrom - 'A', m.rowFrom - '1'].isOccupied() && board.squares[m.colFrom - 'A', m.rowFrom - '1'].occupant.pieceName == "Pawn_White") {
+                eval += pawnMoveEval;
             }
         }
 
@@ -99,9 +120,25 @@ public class BoardEvalAI : AI
             if (m.castle > 0) {
                 eval -= castleEval / 2;
             }
-            Piece k = b.pieces.Find(p => p.pieceName == "King_White");
-            if (k.position == board.squares[m.colTo - 'A', m.rowTo - '1']) {
-                eval -= checkEval;
+            Piece p = board.squares[m.colTo - 'A', m.rowTo - '1'].occupant;
+            if(p != null) {
+                switch (p.pieceName) {
+                    case "King_White": 
+                        eval -= checkEval; 
+                        break;
+
+                    case "Queen_White": eval -= queenAttackEval; break;
+                    case "Rook_White": eval -= rookaAttackEval; break;
+                    case "Bishop_White": eval -= pieceAttackEval; break;
+                    case "Knight_White": eval -= pieceAttackEval; break;
+                    case "Pawn_White": eval -= pawnAttackEval; break;
+
+                    case "Queen_Black": eval -= queenProtectEval; break;
+                    case "Rook_Black": eval -= rookProtectEval; break;
+                    case "Bishop_Black": eval -= pieceProtectEval; break;
+                    case "Knight_Black": eval -= pieceProtectEval; break;
+                    case "Pawn_Black": eval -= pawnProtectEval; break;
+                }
             }
             eval -= squareControlEval;
         }
@@ -110,9 +147,23 @@ public class BoardEvalAI : AI
             if (m.castle > 0) {
                 eval += castleEval / 2;
             }
-            Piece k = b.pieces.Find(p => p.pieceName == "King_Black");
-            if (k.position == board.squares[m.colTo - 'A', m.rowTo - '1']) {
-                eval += checkEval;
+            Piece p = board.squares[m.colTo - 'A', m.rowTo - '1'].occupant;
+            if (p != null) {
+                switch (p.pieceName) {
+                    case "King_Black": eval += checkEval; break;
+
+                    case "Queen_Black": eval += queenAttackEval; break;
+                    case "Rook_Black": eval -= rookaAttackEval; break;
+                    case "Bishop_Black": eval += pieceAttackEval; break;
+                    case "Knight_Black": eval += pieceAttackEval; break;
+                    case "Pawn_Black": eval += pawnProtectEval; break;
+
+                    case "Queen_White": eval += queenProtectEval; break;
+                    case "Rook_White": eval -= rookProtectEval; break;
+                    case "Bishop_White": eval += pieceProtectEval; break;
+                    case "Knight_White": eval += pieceProtectEval; break;
+                    case "Pawn_White": eval += pawnProtectEval; break;
+                }
             }
             eval += squareControlEval;
         }

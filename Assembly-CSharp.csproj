@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Assets\Script\AI\AI.cs" />
     <Compile Include="Assets\Script\AI\BoardEvalAI.cs" />
+    <Compile Include="Assets\Script\AI\BoardEvalAIDepth.cs" />
     <Compile Include="Assets\Script\AI\RandomAI.cs" />
     <Compile Include="Assets\Script\Board.cs" />
     <Compile Include="Assets\Script\BoardGenerator.cs" />
