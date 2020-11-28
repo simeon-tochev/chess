@@ -319,7 +319,11 @@ public class Board {
     }
 
     public List<Board> GetNextBoards() {
-        return null;
+        List<Board> nextBoards = new List<Board>();
+        foreach(Move m in legalMoves) {
+            nextBoards.Add(GetNextBoard(m));
+        }
+        return nextBoards;
     }
 
     public bool IsChecked(bool kingColor) {

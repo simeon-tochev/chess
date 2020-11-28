@@ -74,6 +74,7 @@ public abstract class Piece  {
         board = b;
         position = b.GetSquare(p.col - 'A', p.row - '1');
         position.occupant = this;
+		hasMoved = p.hasMoved;
         pieceName = GetType().Name;
         if (color) {
             pieceName += "_Black";

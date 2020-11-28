@@ -15,17 +15,6 @@ public class King : Piece {
 
 	public override List<Move> CalculateLegalMoves(){
         List<Move> legalMoves = new List<Move>();
-
-
-        /*
-        if (!hasMoved)
-            if (color) {
-                
-            } else {
-
-            }
-       */
-        
         
 		if (col < 'H' && row < '8') {
 			if (!position.GetUpperRight().isOccupied()  ) {

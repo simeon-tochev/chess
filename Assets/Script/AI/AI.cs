@@ -15,7 +15,7 @@ public abstract class AI : Player
         base.Start();
     }
 
-    protected void Update() {
+    protected void Update() {/*
         if (ToPlay() && board.gameState == '1') {
             timer += Time.deltaTime;
             if(timer > timeTothink) {
@@ -23,7 +23,7 @@ public abstract class AI : Player
             }
         } else {
             timer = 0;
-        }
+        }*/
     }
 
     public void PlayMove() {

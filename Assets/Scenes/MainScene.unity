@@ -203,7 +203,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2132915764}
+      - m_Target: {fileID: 0}
         m_MethodName: PlayMove
         m_Mode: 1
         m_Arguments:
@@ -570,7 +570,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2132915764}
+      - m_Target: {fileID: 0}
         m_MethodName: PlayMove
         m_Mode: 1
         m_Arguments:
@@ -915,6 +915,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: 0
   moveManager: {fileID: 0}
+  turnCount: 0
 --- !u!4 &1445704404
 Transform:
   m_ObjectHideFlags: 0
@@ -1134,11 +1135,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2132915763}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e862b119e8adf304d8051164f535a11f, type: 3}
+  m_Script: {fileID: 11500000, guid: 782f4d07ef86ba84c944e8efe607d3bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 1
+  color: 0
   moveManager: {fileID: 0}
+  turnCount: 0
   timeTothink: 0
   timer: 0
   depth: 0
